@@ -1,5 +1,6 @@
-language: generic
 sudo: required
+language: generic
+
 services:
   - docker
 
@@ -9,14 +10,14 @@ before_install:
 script:
   - docker run -e CI=true pels/react-test npm test
 
-  after_success:
+after_success:
   - docker build -t pels/multi-client ./client
   - docker build -t pels/multi-nginx ./nginx
   - docker build -t pels/multi-server ./server
   - docker build -t pels/multi-worker ./worker
-
+  # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-
+  # Take those images and push them to docker hub
   - docker push pels/multi-client
   - docker push pels/multi-nginx
   - docker push pels/multi-server
