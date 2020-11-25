@@ -22,3 +22,16 @@ after_success:
   - docker push pablocgo/multi-nginx
   - docker push pablocgo/multi-server
   - docker push pablocgo/multi-worker
+
+deploy:
+    edge: true
+    provider: elasticbeanstalk
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    region: "us-west-2"
+    app: "multi-docker"
+    env: "MultiDocker-env"
+    bucket_name: "elasticbeanstalk-us-west-2-894263465073"
+    bucket_path: "docker-multi"
+    on:
+        branch: master
