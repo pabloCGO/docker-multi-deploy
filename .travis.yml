@@ -11,23 +11,20 @@ script:
   - docker run -e CI=true pablocgo/react-test npm test
 
 after_success:
-  - docker build -t pablocgo/multi-client ./client
-  - docker build -t pablocgo/multi-nginx ./nginx
-  - docker build -t pablocgo/multi-server ./server
-  - docker build -t pablocgo/multi-worker ./worker
+  - docker build -t pablocgo/multi-client-10-14 ./client
+  - docker build -t pablocgo/multi-nginx-10-14 ./nginx
+  - docker build -t pablocgo/multi-server-10-14 ./server
+  - docker build -t pablocgo/multi-worker-10-14 ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push pablocgo/multi-client
-  - docker push pablocgo/multi-nginx
-  - docker push pablocgo/multi-server
-  - docker push pablocgo/multi-worker
+  - docker push pablocgo/multi-client-10-14
+  - docker push pablocgo/multi-nginx-10-14
+  - docker push pablocgo/multi-server-10-14
+  - docker push pablocgo/multi-worker-10-14
 
 deploy:
-    edge: true
     provider: elasticbeanstalk
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
     region: "us-west-2"
     app: "multi-docker"
     env: "MultiDocker-env"
@@ -35,3 +32,5 @@ deploy:
     bucket_path: "docker-multi"
     on:
         branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
